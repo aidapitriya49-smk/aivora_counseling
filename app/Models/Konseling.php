@@ -2,29 +2,51 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Konseling extends Model
 {
-    protected $table = 'konseling';
-    protected $primaryKey = 'id_konseling';
-    public $incrementing = false;
-    protected $keyType = 'string';
+    use HasFactory;
 
+    // NAMA TABEL DATABASE //
+    protected $table = 'konseling';
+
+    // PRIMARY KEY TABEL //
+    protected $primaryKey = 'id_konseling';
+
+public $timestamps = true;
+    public $incrementing = true; 
+    protected $keyType = 'int';
+
+    /**
+     * Kolom yang boleh diisi secara massal (Mass Assignment).
+     */
     protected $fillable = [
-        'id_konseling', 'id_guru_bk', 'id_siswa', 'tanggal', 
-        'jenis_konseling', 'catatan_konseling', 'status'
+        'id_siswa', 
+        'id_guru_bk', 
+        'tanggal', 
+        'catatan_konseling', 
+        'tipe_konseling', 
+        'jenis_konseling', 
+        'status'
     ];
 
-    protected static function boot() {
-        parent::boot();
-        static::creating(function ($model) {
-            if (empty($model->id_konseling)) {
-                $model->id_konseling = (string) Str::uuid();
-            }
-        });
+    /**
+     * Relasi ke Guru BK
+     * Menghubungkan id_guru_bk di tabel konseling ke id_guru_bk di tabel guru_bk.
+     */
+    public function guru()
+    {
+        return $this->belongsTo(GuruBKS::class, 'id_guru_bk', 'id_guru_bk');
     }
 
-    public function guru() { return $this->belongsTo(Guru::class, 'id_guru_bk', 'id_guru_bk'); }
+    /**
+     * Relasi ke Siswa
+     * Menghubungkan id_siswa di tabel konseling ke id_siswa di tabel siswa.
+     */
+    public function siswa()
+    {
+        return $this->belongsTo(Siswa::class, 'id_siswa', 'id_siswa');
+    }
 }

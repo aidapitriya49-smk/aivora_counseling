@@ -47,16 +47,16 @@
                 <tr class="border-b border-slate-50">
                     <td class="py-4 px-4 font-bold">{{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}</td>
                     <td class="py-4 px-4 capitalize">{{ $item->jenis_konseling }}</td>
-                    <td class="py-4 px-4">{{ $item->guru->nama_guru ?? 'N/A' }}</td>
-                    <td class="py-4 px-4 text-center">
-                        @if($item->status == 'selesai')
-                            <span class="text-green-600 font-bold">✓ Selesai</span>
-                        @elseif($item->status == 'dibatalkan')
-                            <span class="text-red-600 font-bold">✕ Dibatalkan</span>
-                        @else
-                            <span class="text-amber-600 font-bold">Menunggu</span>
-                        @endif
-                    </td>
+                    <td class="py-4 px-4">{{ $item->guru->nama_guru_bk ?? 'N/A' }}</td>
+                   <td class="py-4 px-4 text-center">
+    @if($item->status == 'ya')
+        <span class="text-green-600 font-bold">✓ Disetujui</span>
+    @elseif($item->status == 'tidak')
+        <span class="text-red-600 font-bold">✕ Ditolak</span>
+    @else
+        <span class="text-amber-600 font-bold">⌛ Menunggu</span>
+    @endif
+</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -70,7 +70,7 @@
 </main>
 
 <footer class="fixed bottom-0 left-0 w-full text-white/80 text-center py-2 text-[12px]">
-    © 2026 E-Counseling. All Rights Reserved.
+    © AIVORA 2026 E-Counseling. All Rights Reserved. Developed for Educational Guidance and Counseling.
 </footer>
 
 </body>

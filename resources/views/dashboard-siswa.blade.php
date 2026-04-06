@@ -65,7 +65,7 @@
         <ul class="space-y-3 text-white font-medium">
 
             <li class="{{ request()->routeIs('dashboard-admin') ? 'bg-white/30' : '' }} px-4 py-2 rounded-lg hover:bg-white/20 transition">
-    <a href="{{ route('dashboard-admin') }}" class="block w-full">
+    <a href="{{ route('dashboard-siswa') }}" class="block w-full">
         Dashboard
     </a>
 </li>
@@ -109,29 +109,33 @@
                 @yield('content')<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
     <!-- CARD 1 -->
-    <div class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:scale-105 transition-transform">
-        <div class="text-3xl">📊</div>
-        <div>
-            <p class="text-sm text-gray-500">Poin Saya</p>
-            <p class="text-lg font-semibold text-gray-800">0 Poin</p>
-        </div>
+    <a href="{{ route('siswa.riwayat_pelanggaran') }}" 
+   class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:scale-105 transition-transform block cursor-pointer">
+    
+    <div class="text-3xl">📊</div>
+    
+    <div>
+        <p class="text-sm text-gray-500">Poin Saya</p>
     </div>
+</a>
 
       <!-- CARD 2 -->
-    <div class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:scale-105 transition-transform">
-        <div class="text-3xl">📝</div>
-        <div>
-            <p class="text-sm text-gray-500">Status Konseling</p>
-            <p class="text-lg font-semibold text-gray-800">Aktif</p>
-        </div>
+   <a href="{{ route('siswa.jadwal_konseling') }}" 
+   class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:scale-105 transition-transform block cursor-pointer">
+    
+    <div class="text-3xl">📝</div>
+    
+    <div>
+        <p class="text-sm text-gray-500">Status Konseling</p>
+
     </div>
+</a>
 
         <!-- CARD 3 -->
     <div class="bg-gray-100 rounded-2xl p-5 flex items-center gap-4 shadow-sm hover:scale-105 transition-transform">
         <div class="text-3xl">📅</div>
         <div>
             <p class="text-sm text-gray-500">Total Konseling</p>
-            <p class="text-lg font-semibold text-gray-800">0 Sesi</p>
         </div>
     </div>
     </div> 
@@ -139,95 +143,66 @@
     <!-- JADWAL & RIWAYAT -->
 <div class="grid grid-cols-10 md:grid-cols-2 gap-6  mt-10">
 
-<div class="bg-white rounded-2xl p-6 shadow-md">
-    <h2 class="text-lg font-semibold mb-2 text-black">
-        Jadwal Konseling Saya
-    </h2>
+    <div class="bg-white rounded-2xl p-6 shadow-md">
+    <h2 class="text-lg font-semibold mb-2 text-black">Jadwal Konseling Saya</h2>
+    <div class="w-full h-1 bg-gray-400 mb-4 rounded-full"></div>
 
-    <!-- Garis pendek -->
-    <div class="w-90 h-1 bg-gray-400 mb-4 rounded-full"></div>
-
-    <div class="rounded-xl p-4">
-        <p class="text-lg font-semibold mb-2 text-black">Senin, 12 Feb 2026</p>
-         <div class="flex items-center gap-2 mb-2">
-        <span class="text-base">⏰</span>
-        <p class="text-lg font-semibold text-black">10.00 - 10.30</p>
-    </div>
-        <div class="flex items-center gap-2 mb-2">
-        <span class="text-base">👩‍🏫</span>
-        <p class="text-lg font-semibold text-black">Bu Rina</p>
-    </div>
-    <!-- KONTAINER UTAMA -->
-<div class="flex flex-col gap-2 w-full">
-
-    <!-- STATUS -->
-    <div class="flex flex-col gap-2">
-        <span class="flex justify-center items-center w-full
-                     text-sm bg-orange-100 text-orange-600 py-2 rounded-full font-medium">
-            Menunggu Persetujuan
-        </span>
-        <button class="w-full flex justify-center items-center
-                       bg-blue-100/70 text-blue-600
-                       py-1.5 rounded-lg text-sm font-medium
-                       hover:bg-blue-200/70 transition">
-            Lihat Semua Jadwal
-        </button>
-    </div>
-
-</div>
-
-    </div>
-</div>
-
- <!-- RIWAYAT -->
-<div class="bg-white rounded-2xl p-6 shadow-md">
-
-    <h2 class="text-lg font-semibold mb-2 text-black">
-        Riwayat Konseling
-    </h2>
-
-    <!-- Garis -->
-    <div class="w-90 h-1 bg-gray-400 mb-4 rounded-full"></div>
-
-    <div class="flex justify-between border-b py-3">
-        <div>
-            <p class="text-base font-semibold mb-1 text-black">02 Feb 2026</p>
-            <p class="text-gray-700 text-sm text-black">Konseling Pribadi</p>
-        </div>
-        <span class="text-green-600 text-sm text-black">✔ Selesai</span>
-    </div>
-
-    <div class="flex justify-between border-b py-3">
-        <div>
-            <p class="text-base font-semibold mb-1 text-black">25 Jan 2026</p>
-            <p class="text-gray-700 text-sm text-black">Konseling Karir</p>
-        </div>
-        <span class="text-green-600 text-sm text-black">✔ Selesai</span>
-    </div>
-
-    <div class="flex justify-between py-3">
-        <div>
-            <p class="text-base font-semibold mb-1 text-black">10 Jan 2026</p>
-            <p class="text-gray-700 text-sm text-black">Konseling Belajar</p>
-        </div>
-        <span class="text-red-600 text-sm text-black">✖ Dibatalkan</span>
-    </div>
-
-     <!-- LIHAT SEMUA -->
-<div class="mt-4 text-center">
-    <a href="#" class="text-blue-600 text-sm font-medium hover:underline">
-        LIHAT SEMUA  &gt;
-    </a>
-</div>
-        </div>
-</div>
+    @if($jadwalTerdekat)
+        <div class="rounded-xl p-4">
+            <p class="text-lg font-semibold mb-2 text-black">{{ \Carbon\Carbon::parse($jadwalTerdekat->tanggal)->format('l, d M Y') }}</p>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-base">⏰</span>
+                <p class="text-lg font-semibold text-black">{{ $jadwalTerdekat->jam ?? '10.00' }}</p>
             </div>
+            <div class="flex items-center gap-2 mb-2">
+                <span class="text-base">👩‍🏫</span>
+                <p class="text-lg font-semibold text-black">{{ $jadwalTerdekat->guru->nama_guru_bk ?? 'Guru BK' }}</p>
+            </div>
+            <div class="flex flex-col gap-2">
+                <span class="flex justify-center items-center w-full text-sm py-2 rounded-full font-medium 
+                    {{ $jadwalTerdekat->status == 'pending' ? 'bg-orange-100 text-orange-600' : 'bg-green-100 text-green-600' }}">
+                    {{ ucfirst($jadwalTerdekat->status == 'pending' ? 'Menunggu Persetujuan' : 'Disetujui') }}
+                </span>
+                <a href="{{ route('siswa.jadwal_konseling') }}" class="w-full flex justify-center items-center bg-blue-100/70 text-blue-600 py-1.5 rounded-lg text-sm font-medium hover:bg-blue-200/70 transition">
+                    Lihat Semua Jadwal
+                </a>
+            </div>
+        </div>
+    @else
+        <p class="text-gray-500 text-center py-10">Belum ada jadwal aktif.</p>
+    @endif
+</div>
+
+<div class="bg-white rounded-2xl p-6 shadow-md">
+    <h2 class="text-lg font-semibold mb-2 text-black">Riwayat Konseling</h2>
+    <div class="w-full h-1 bg-gray-400 mb-4 rounded-full"></div>
+
+    @forelse($riwayatKonseling as $riwayat)
+        <div class="flex justify-between border-b py-3">
+            <div>
+                <p class="text-base font-semibold mb-1 text-black">{{ \Carbon\Carbon::parse($riwayat->tanggal)->format('d M Y') }}</p>
+                <p class="text-gray-700 text-sm">{{ $riwayat->tipe_konseling }}</p>
+            </div>
+            <span class="{{ $riwayat->status == 'selesai' ? 'text-green-600' : 'text-red-600' }} text-sm">
+                {{ $riwayat->status == 'selesai' ? '✔ Selesai' : '✖ Dibatalkan' }}
+            </span>
+        </div>
+    @empty
+        <p class="text-gray-500 text-center py-5">Belum ada riwayat.</p>
+    @endforelse
+
+    <div class="mt-4 text-center">
+        <a href="{{ route('siswa.riwayat_konseling') }}" class="text-blue-600 text-sm font-medium hover:underline">
+            LIHAT SEMUA >
+        </a>
+    </div>
+</div>
 
     </main>
 </div> 
 <!-- FOOTER -->
 <footer class="w-full text-white/80 text-center py-2 text-[12px] mt-auto">
-    © 2026 E-Counseling. All Rights Reserved Developed for Educational Guidance and Counseling.
+    © AIVORA  2026 E-Counseling. All Rights Reserved Developed for Educational Guidance and Counseling.
 </footer>
 </body>
 </html>

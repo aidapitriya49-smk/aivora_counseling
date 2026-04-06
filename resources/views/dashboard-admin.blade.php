@@ -21,14 +21,16 @@
     <div class="flex items-center">
 
         <!-- KIRI -->
-        <a href="{{ route('admin.profil') }}" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
-        <div class="flex items-center gap-2">
-            <div class="w-12 h-12 rounded-full overflow-hidden border border-white/50">
-                <img src="/images/profilelakilaki.png" class="w-full h-full object-cover">
-            </div>
-            <span class="text-white text-base font-medium">Admin</span>
+<a href="{{ route('admin.profil') }}" class="flex items-center gap-2 hover:opacity-80 transition cursor-pointer">
+    <div class="flex items-center gap-2">
+        <div class="w-12 h-12 rounded-full overflow-hidden border border-white/50 bg-white/20">
+            <img src="{{ asset('images/' . ($admin->foto ?? 'profilelakilaki.png')) }}" 
+                 class="w-full h-full object-cover"
+                 onerror="this.src='{{ asset('images/profilelakilaki.png') }}'">
         </div>
-      </a>
+        <span class="text-white text-base font-medium">{{ $admin->name ?? 'Admin' }}</span>
+    </div>
+</a>
 
         <!-- KANAN -->
         <div class="flex items-center gap-3 ml-auto">
@@ -166,25 +168,19 @@
                     <img src="/images/logodatabase.png"
                          class="w-7 h-7 object-contain">
                 </div>
+    <h2 class="text-lg font-bold text-black text-center">
+        Data Master
+    </h2>
+</div>
 
-                <h2 class="text-lg font-bold text-black">
-                    Data Master
-                </h2>
-            </div>
-
-            <div class="flex flex-col items-center justify-center h-[calc(100%-64px)]">
-        <p class="text-3xl font-bold text-black">0</p>
-        <p class="text-sm text-black/70">Total Data</p>
-    </div>
+            
         </a>
 
-       <!-- BOX 4 STATISTIK SISTEM -->
-<div class="bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg 
-            p-6 h-44 hover:scale-105 transition">
+<a href="{{ route('admin.statistikSistem') }}" 
+   class="block bg-white/30 backdrop-blur-sm rounded-3xl shadow-lg p-6 h-44 hover:scale-105 transition cursor-pointer group">
 
-    <!-- HEADER (ICON + TITLE) -->
     <div class="flex items-center gap-4 mb-4">
-        <div class="w-12 h-12 bg-black/10 rounded-full flex items-center justify-center">
+        <div class="w-12 h-12 bg-black/10 rounded-full flex items-center justify-center group-hover:bg-black/20 transition">
             <img src="/images/logostatistik.png" class="w-7 h-7 object-contain">
         </div>
         <h2 class="text-lg font-bold text-black">
@@ -192,35 +188,15 @@
         </h2>
     </div>
 
-    <!-- KONTEN (ANGKA + DIAGRAM) -->
-    <div class="flex justify-between items-center h-[calc(100%-64px)]">
-        
-        <!-- ANGKA DI TENGAH KIRI -->
-        <div class="flex flex-col items-center justify-center">
-            <p class="text-3xl font-bold text-black">0%</p>
-        </div>
-
-        <!-- DONUT CHART DI KANAN -->
-        <div class="relative w-20 h-20">
-            <!-- LINGKARAN GREY SEBAGAI BACKGROUND -->
-            <div class="absolute inset-0 rounded-full "></div>
-
-            <!-- LINGKARAN ISI / PROGRESS -->
-            <div id="progressCircle" class="absolute inset-0 rounded-full bg-purple-500 origin-center transform rotate-[-90deg]">
-            </div>
-
-            <!-- ANGKA DI TENGAH LINGKARAN -->
-            <div class="absolute inset-0 flex items-center justify-center">
-                <span id="percentText" class="text-xs font-semibold text-white">0%</span>
-            </div>
-        </div>
-
+    <div class="flex items-center justify-center h-[calc(100%-64px)]">
+        {{-- Angka 27% akan berada tepat di tengah --}}
+        <p class="text-4xl font-black text-black tracking-tighter">
+            27%
+        </p>
+    </div>
+</a>
     </div>
 </div>
-       
-
-  
-
 </main>
 </body>
     </div> 
@@ -228,7 +204,7 @@
 
 <!-- FOOTER -->
 <footer class="w-full text-white/80 text-center py-2 text-[12px] mt-auto">
-    © 2026 E-Counseling. All Rights Reserved Developed for Educational Guidance and Counseling.
+     © AIVORA 2026 E-Counseling. All Rights Reserved. Developed for Educational Guidance and Counseling.
 </footer>
 </body>
 </html>

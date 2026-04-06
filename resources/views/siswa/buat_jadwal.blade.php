@@ -30,37 +30,67 @@
   <div class="bg-white p-8 rounded-[2rem] shadow-xl max-w-lg mx-auto">
     <h3 class="text-2xl font-black text-slate-800 uppercase mb-6">Buat Jadwal Konseling</h3>
 
-    <div class="mb-6 p-4 rounded-xl {{ $sisaKuota > 0 ? 'bg-green-50 text-green-600' : 'bg-red-50 text-red-600' }}">
-        <p class="font-bold">Sisa Kuota Hari Ini: {{ $sisaKuota }} / 5</p>
-    </div>
-
-    @if($sisaKuota > 0)
-        <form action="{{ route('siswa.simpan_jadwal') }}" method="POST">
-    @csrf
-    
-    <div class="mb-4">
-        <label>Ceritakan Masalah</label>
-        <textarea name="catatan_konseling" class="w-full p-4 border rounded-xl" required></textarea>
-    </div>
-
-    <button type="submit" class="bg-blue-600 text-white px-8 py-3 rounded-xl">Kirim Pengajuan</button>
-</form>
-    @else
-        <button disabled class="w-full bg-slate-300 text-white py-4 rounded-xl font-bold cursor-not-allowed">
-            Kuota Penuh (0 Tersisa)
-        </button>
-        <p class="text-red-500 mt-2 text-sm italic text-center">*Maaf, tidak bisa mendaftar karena kuota sudah penuh.</p>
+    @if(session('error'))
+        <div class="mb-6 p-4 bg-red-100 text-red-600 rounded-xl border border-red-200">
+            <p class="font-bold text-sm">⚠️ {{ session('error') }}</p>
+        </div>
     @endif
+
+    @if(session('success'))
+        <div class="mb-6 p-4 bg-green-100 text-green-600 rounded-xl border border-green-200">
+            <p class="font-bold text-sm">✅ {{ session('success') }}</p>
+        </div>
+    @endif
+
+    <form action="{{ route('siswa.simpan_jadwal') }}" method="POST">
+        @csrf
+        
+        <div class="mb-4">
+            <label class="block text-sm font-bold text-slate-700 mb-2">Pilih Guru BK</label>
+            <select name="id_guru_bk" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" required>
+                <option value="">-- Pilih Guru --</option>
+                @foreach($gurus as $g)
+                    <option value="{{ $g->id_guru_bk }}">{{ $g->nama_guru_bk }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-bold text-slate-700 mb-2">Tanggal Konseling</label>
+            <input type="date" name="tanggal" class="w-full p-3 border rounded-xl focus:ring-2 focus:ring-blue-500 outline-none" min="{{ date('Y-m-d') }}" required>
+            <p class="text-[10px] text-slate-400 mt-1">*Maksimal 5 siswa per hari</p>
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-sm font-bold text-slate-700 mb-2">Metode Konseling</label>
+            <div class="flex gap-6 p-2">
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="radio" name="tipe_konseling" value="offline" checked> Offline
+                </label>
+                <label class="flex items-center gap-2 cursor-pointer text-green-600 font-semibold">
+                    <input type="radio" name="tipe_konseling" value="online"> Online 
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <label class="block text-sm font-bold text-slate-700 mb-2">Ceritakan Masalah</label>
+            <textarea name="catatan_konseling" class="w-full p-4 border rounded-xl h-32 focus:ring-2 focus:ring-blue-500 outline-none" required placeholder="Jelaskan masalah Anda..."></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition shadow-lg transform active:scale-95">
+            Kirim Pengajuan
+        </button>
+    </form>
   </div>
 
-  <div class="flex justify-center mt-8">
-      <a href="{{ route('dashboard-siswa') }}" class="text-white/70 font-semibold hover:text-white transition text-sm underline">BACK HOME</a>
-  </div>
+  <div class="flex justify-end mt-8">
+            <a href="{{ route('dashboard-siswa') }}" class="text-gray-400 font-semibold hover:text-gray-600 transition text-sm">BACK HOME ></a>
+        </div>
 </main>
 
 <footer class="fixed bottom-0 left-0 w-full text-white/80 text-center py-2 text-[12px]">
-    © 2026 E-Counseling. All Rights Reserved.
+     © AIVORA 2026 E-Counseling. All Rights Reserved. Developed for Educational Guidance and Counseling.
 </footer>
-
 </body>
 </html>

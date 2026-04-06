@@ -23,9 +23,9 @@
         <div class="flex flex-col items-center mb-8">
             <div class="relative group">
                 <div class="w-32 h-32 rounded-full overflow-hidden border-4 border-blue-100 shadow-md bg-gray-50">
-                    <img id="preview" src="{{ asset('images/' . ($guru->foto ?? 'guru-default.png')) }}" 
-                         class="w-full h-full object-cover"
-                         onerror="this.src='https://ui-avatars.com/api/?name=Guru+BK&background=1e40af&color=fff'">
+                    <img id="preview" 
+     src="{{ asset('images/' . ($guru->foto ?? 'guru-default.png')) }}?v={{ time() }}" 
+     class="w-full h-full object-cover">
                 </div>
                 <label class="absolute bottom-0 right-0 bg-blue-600 p-2 rounded-full cursor-pointer hover:bg-blue-700 border-2 border-white transition shadow-lg">
                     <span class="text-white text-xs">📷</span>
@@ -33,8 +33,6 @@
                 </label>
             </div>
         </div>
-
-        <input type="hidden" name="foto_lama" value="{{ $guru->foto ?? '' }}">
 
         <div class="space-y-5">
             <div>
@@ -46,27 +44,32 @@
                 <input type="text" name="nip" value="{{ $guru->nip ?? '' }}" class="w-full border-b-2 py-1 outline-none focus:border-blue-500 font-semibold text-slate-700">
             </div>
             <div>
-    <label class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Jenis Kelamin</label>
-    <select name="jenis_kelamin" class="w-full border-b-2 py-1 outline-none focus:border-blue-500 font-semibold text-slate-700 bg-transparent">
-        <option value="" disabled {{ !isset($guru->jenis_kelamin) ? 'selected' : '' }}>Pilih Jenis Kelamin</option>
-        <option value="Laki-laki" {{ ($guru->jenis_kelamin ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
-        <option value="Perempuan" {{ ($guru->jenis_kelamin ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
-    </select>
-</div>
+                <label class="text-[10px] font-black text-slate-400 uppercase tracking-tighter">Jenis Kelamin</label>
+                <select name="jenis_kelamin" class="w-full border-b-2 py-1 outline-none focus:border-blue-500 font-semibold text-slate-700 bg-transparent">
+                    <option value="" disabled {{ !isset($guru->jenis_kelamin) ? 'selected' : '' }}>Pilih Jenis Kelamin</option>
+                    <option value="Laki-laki" {{ ($guru->jenis_kelamin ?? '') == 'Laki-laki' ? 'selected' : '' }}>Laki-laki</option>
+                    <option value="Perempuan" {{ ($guru->jenis_kelamin ?? '') == 'Perempuan' ? 'selected' : '' }}>Perempuan</option>
+                </select>
+            </div>
         </div>
 
         <button type="submit" class="w-full bg-blue-600 text-white font-black py-4 rounded-2xl mt-8 shadow-lg hover:bg-blue-700 active:scale-95 transition-all uppercase tracking-widest text-sm">
             Simpan Profil
         </button>
-        
-       <form action="{{ route('guru-bk.update_profil') }}" method="POST" enctype="multipart/form-data">
-    @csrf
-    </form>
+    </form> <div class="flex justify-center pb-6">
+        <a href="{{ route('dashboard-guru-bk') }}" class="font-semibold text-gray-400 hover:text-gray-600 transition text-sm">
+            < BACK HOME
+        </a>
+    </div>
+</div>
+
 <script>
     function previewImage(input) {
         if (input.files && input.files[0]) {
             var reader = new FileReader();
-            reader.onload = function(e) { document.getElementById('preview').src = e.target.result; }
+            reader.onload = function(e) { 
+                document.getElementById('preview').src = e.target.result; 
+            }
             reader.readAsDataURL(input.files[0]);
         }
     }

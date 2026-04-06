@@ -4,174 +4,172 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Konseling;
+use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
-    // 1. Menampilkan Dashboard Utama dengan Data Real-time
+    // MENAMPILKAN DASHBOARD UTAMA //
     public function index()
     {
-        // Menghitung jumlah berdasarkan role dari database
+        $admin = DB::table('users')->where('role', 'admin')->first();
         $totalSiswa = User::where('role', 'siswa')->count();
         $totalGuru = User::where('role', 'guru')->count();
-        
-        // Menghitung total semua pengguna (Siswa + Guru + Admin)
         $totalUser = User::count(); 
-
-        // Mengirimkan variabel ke view 'dashboard-admin'
-        return view('dashboard-admin', compact('totalSiswa', 'totalGuru', 'totalUser')); 
+        return view('dashboard-admin', compact('totalSiswa', 'totalGuru', 'totalUser', 'admin')); 
     }
 
-    // 2. Menampilkan Form Registrasi Guru
+    // UNTUK SIDEBAR AGAR TIDAK ERROR //
+    public function informasiRingkas()
+    {
+        return $this->index(); 
+    }
+
+    // MENAMPILKAN FORM REGISTRASI GURU // 
     public function registrasiGuru()
     {
         return view('admin.registrasi_guru');
     }
 
-    // 3. Menampilkan Semua Data Pengguna (Tabel)
+    // MENAMPILKAN SEMUA DATA PENGGUNA (TABEL) // 
     public function dataPengguna()
     {
         $users = User::all(); 
         return view('admin.data_pengguna', compact('users'));
     }
 
-    // 4. Proses Simpan Guru Baru
-   public function storeGuru(Request $request)
-{
-    $request->validate([
-        'name' => 'required',
-        'email' => 'required|email|unique:users',
-        'password' => 'required|min:6'
+    // PROSES SIMPAN GURU BARU // 
+    public function storeGuru(Request $request)
+    {
+    // VALIDASI INPUT //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|min:6'
     ]);
 
-    User::create([
+    // SIMPAN KE TABEL 'USERS' (AKUN LOGIN) //
+    $user = User::create([
         'name' => $request->name,
         'email' => $request->email,
         'password' => Hash::make($request->password),
         'role' => 'guru'
     ]);
 
-    return redirect()->route('admin.dataPengguna')
-    ->with('success','Guru berhasil ditambahkan');
-}
+    \Illuminate\Support\Facades\DB::table('guru_bk')->insert([
+        'id_user'      => $user->id,         
+        'nama_guru_bk' => $user->name,       
+        'created_at'   => now(),
+        'updated_at'   => now(),
+    ]);
+
+    return redirect()->route('admin.dataPengguna')->with('success','Guru berhasil ditambahkan');
+  }
+
+    // DATA MASTER //
     public function dataMaster()
     {
-    // Data Real dari Database
-    $totalUser = \App\Models\User::count();
-    $totalSiswa = \App\Models\User::where('role', 'siswa')->count();
-    $totalGuru = \App\Models\User::where('role', 'guru')->count();
-
-    // Data Tambahan (Konseling & Pelanggaran)
-    // Sementara 0 jika tabel belum ada, atau ganti dengan hitungan model jika sudah ada
-    $totalKonseling = 0; 
-    $totalPelanggaran = 0;
-
-    return view('admin.data_master', compact(
-        'totalUser', 
-        'totalSiswa', 
-        'totalGuru', 
-        'totalKonseling', 
-        'totalPelanggaran'
-    ));
+        $totalUser = User::count();
+        $totalSiswa = User::where('role', 'siswa')->count();
+        $totalGuru = User::where('role', 'guru')->count();
+        $totalKonseling = 0; 
+        $totalPelanggaran = 0;
+        return view('admin.data_master', compact('totalUser', 'totalSiswa', 'totalGuru', 'totalKonseling', 'totalPelanggaran'));
     }
 
-
-public function statistikSistem()
+    // DATA STATISTIKA SISTEM //
+   public function statistikSistem()
 {
-    $totalSiswa = \App\Models\User::where('role', 'siswa')->count();
-    $totalGuru = \App\Models\User::where('role', 'guru')->count();
-    $totalUser = \App\Models\User::count();
+    $bulanIni = date('m');
+    $tahunIni = date('Y');
+    $admin = Auth::user();
 
-    // Simulasi data untuk grafik (bisa dikembangkan nanti)
+    // Mengambil data pendaftaran per minggu HANYA untuk bulan berjalan
+    $minggu1 = Konseling::whereYear('created_at', $tahunIni)->whereMonth('created_at', $bulanIni)
+                ->whereBetween(DB::raw('DAY(created_at)'), [1, 7])->count();
+    $minggu2 = Konseling::whereYear('created_at', $tahunIni)->whereMonth('created_at', $bulanIni)
+                ->whereBetween(DB::raw('DAY(created_at)'), [8, 14])->count();
+    $minggu3 = Konseling::whereYear('created_at', $tahunIni)->whereMonth('created_at', $bulanIni)
+                ->whereBetween(DB::raw('DAY(created_at)'), [15, 21])->count();
+    $minggu4 = Konseling::whereYear('created_at', $tahunIni)->whereMonth('created_at', $bulanIni)
+                ->whereBetween(DB::raw('DAY(created_at)'), [22, 31])->count();
+
     $dataGrafik = [
-        'Siswa' => $totalSiswa,
-        'Guru BK' => $totalGuru,
-        'Admin' => $totalUser - ($totalSiswa + $totalGuru)
+        'Minggu 1' => $minggu1,
+        'Minggu 2' => $minggu2,
+        'Minggu 3' => $minggu3,
+        'Minggu 4' => $minggu4,
     ];
 
-    return view('admin.statistik_sistem', compact('totalSiswa', 'totalGuru', 'totalUser', 'dataGrafik'));
+    // Jika tidak ada data sama sekali, total akan menjadi 0.
+    $totalKonselingBulanIni = array_sum($dataGrafik);
+
+    return view('admin.statistik_sistem', compact('dataGrafik', 'totalKonselingBulanIni', 'admin'));
 }
 
-public function aktivitasTerbaru()
-{
-    // Mengambil 5 user yang baru saja didaftarkan
-    $recentUsers = \App\Models\User::latest()->take(5)->get();
-    
-    return view('admin.aktivitas_terbaru', compact('recentUsers'));
-}
-
-public function editUser($id)
-{
-    $user = User::findOrFail($id);
-    return view('admin.editUser', compact('user'));
-}
-
-// UPDATE USER
-public function updateUser(Request $request, $id)
-{
-    $user = User::findOrFail($id);
-
-    $request->validate([
-        'password' => 'required|min:6'
-    ]);
-
-    $passwordBaru = $request->password;
-
-    // Update password di database
-    $user->update([
-        'password' => Hash::make($passwordBaru)
-    ]);
-
-    // Kirim email ke user
-    Mail::raw("Password baru akun anda adalah: ".$passwordBaru, function($message) use ($user){
-        $message->to($user->email)
-        ->subject('Reset Password Sistem E-Counseling');
-    });
-
-    return redirect()->route('admin.dataPengguna')
-    ->with('success','Password berhasil direset dan dikirim ke email');
-}
-
-// DELETE USER
-public function deleteUser($id)
-{
-    $user = User::findOrFail($id);
-    $user->delete();
-
-    return redirect()->route('admin.dataPengguna')->with('success','Data berhasil dihapus');
-}
-
-// Fungsi untuk menampilkan halaman profil
-public function profil()
-{
-    $admin = DB::table('users')->where('role', 'admin')->first();
-    return view('admin.profil', compact('admin'));
-}
-
-// Fungsi untuk memproses perubahan data
-public function updateProfil(Request $request)
-{
-    // 1. Ambil data admin lama
-    $admin = DB::table('users')->where('role', 'admin')->first();
-    $fotoNama = $admin->foto; // Nama foto lama (default)
-
-    // 2. Cek apakah ada file foto baru yang diunggah
-    if ($request->hasFile('foto')) {
-        $file = $request->file('foto');
-        $fotoNama = time() . '.' . $file->getClientOriginalExtension();
-        $file->move(public_path('images'), $fotoNama); // Simpan ke folder public/images
+    // AKTIVITAS TERBARU //
+    public function aktivitasTerbaru()
+    {
+        $recentUsers = User::latest()->take(5)->get();
+        return view('admin.aktivitas_terbaru', compact('recentUsers'));
     }
 
-    // 3. Update Database
-    DB::table('users')->where('role', 'admin')->update([
-        'name'  => $request->name,
-        'email' => $request->email,
-        'foto'  => $fotoNama, // Simpan nama file fotonya
-        'updated_at' => now(),
-    ]);
+    // EDIT USER //
+    public function editUser($id)
+    {
+        $user = User::findOrFail($id);
+        return view('admin.editUser', compact('user'));
+    }
 
-    return back()->with('success', 'Profil dan Foto berhasil diperbarui!');
-}
+    // UPDATE USER & RESET PASSWORD // 
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+        $request->validate(['password' => 'required|min:6']);
+
+        $user->update(['password' => Hash::make($request->password)]);
+
+        // MENGIRIM EMAIL NOTIFIKASI BARU //
+        Mail::raw("Password baru anda adalah: ".$request->password, function($message) use ($user){
+            $message->to($user->email)->subject('Reset Password Sistem E-Counseling');
+        });
+
+        return redirect()->route('admin.dataPengguna')->with('success','Password berhasil direset');
+    }
+
+    // HAPUS USER //
+    public function deleteUser($id)
+    {
+        User::findOrFail($id)->delete();
+        return redirect()->route('admin.dataPengguna')->with('success','Data berhasil dihapus');
+    }
+
+    // PROFIL ADMIN //
+    public function profil()
+    {
+        $admin = DB::table('users')->where('role', 'admin')->first();
+        return view('admin.profil', compact('admin'));
+    }
+
+    // UPDATE PROFIL ADMIN //
+    public function updateProfil(Request $request)
+    {
+        $admin = DB::table('users')->where('role', 'admin')->first();
+        $fotoNama = $admin->foto; 
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            $fotoNama = time() . '.' . $file->getClientOriginalExtension();
+            $file->move(public_path('images'), $fotoNama);
+        }
+        DB::table('users')->where('role', 'admin')->update([
+            'name'  => $request->name,
+            'email' => $request->email,
+            'foto'  => $fotoNama,
+            'updated_at' => now(),
+        ]);
+        return back()->with('success', 'Profil berhasil diperbarui!');
+    }
 }

@@ -10,22 +10,25 @@ return new class extends Migration
      * Run the migrations.
      */
     public function up(): void
-    {
+{
     Schema::create('tindak_lanjut', function (Blueprint $table) {
-    $table->string('id_tindak_lanjut', 10)->primary();
-    $table->string('id_konseling', 10)->nullable(); // Relasi ke konseling
-    $table->string('id_siswa', 10);
-    $table->string('tindakan');
-    $table->date('tanggal');
-    $table->enum('status', ['proses', 'selesai', 'dibatalkan']);
-    $table->text('keterangan')->nullable();
-    $table->timestamps();
+        $table->string('id_tindak_lanjut', 10)->primary();
+        $table->string('id_pelanggaran', 10); // <--- TAMBAHKAN INI
+        $table->string('id_konseling', 10)->nullable();
+        $table->string('id_siswa', 10);
+        $table->string('tindakan');
+        $table->date('tanggal');
+        $table->enum('status', ['proses', 'selesai', 'dibatalkan'])->default('proses');
+        $table->text('keterangan')->nullable();
+        $table->timestamps();
 
-    // Foreign Keys
-    $table->foreign('id_siswa')->references('id_siswa')->on('siswa');
-    $table->foreign('id_konseling')->references('id_konseling')->on('konseling');
-});
-    }
+        // Foreign Keys
+        // Pastikan nama tabel referensinya benar (pelanggarans atau pelanggaran?)
+        $table->foreign('id_pelanggaran')->references('id_pelanggaran')->on('pelanggarans')->onDelete('cascade');
+        $table->foreign('id_siswa')->references('id_siswa')->on('siswa');
+        $table->foreign('id_konseling')->references('id_konseling')->on('konseling');
+    });
+}
 
     /**
      * Reverse the migrations.

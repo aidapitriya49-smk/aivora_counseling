@@ -26,6 +26,9 @@ class User extends Authenticatable
         'role',
         'poin',             
         'status_konseling',
+        'nisn',                 
+        'alamat',               
+        'tempat_tanggal_lahir', 
     ];
 
     /**

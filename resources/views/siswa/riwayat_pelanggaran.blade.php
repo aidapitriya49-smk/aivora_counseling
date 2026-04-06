@@ -67,8 +67,8 @@
         </div>
 </main>
 
-<footer class="fixed bottom-0 left-0 w-full text-white/80 text-center py-2 text-[12px]">
-    © 2026 E-Counseling. All Rights Reserved.
+<footer class="w-full  text-black-600 text-center py-1 text-[12px] absolute bottom-0">
+    © AIVORA 2026 E-Counseling. All Rights Reserved. Developed for Educational Guidance and Counseling.
 </footer>
 
 </body>

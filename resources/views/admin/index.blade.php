@@ -2,7 +2,7 @@
 
 @section('content')
 
-<!-- STAT CARDS -->
+// START CARDS //
 <div class="grid grid-cols-4 gap-4 mb-6">
     <div class="bg-white p-4 rounded-xl shadow">
         <p class="text-sm text-gray-500">Total Siswa</p>
@@ -26,7 +26,6 @@
 </div>
 
 <div class="grid grid-cols-3 gap-6">
-
     <div class="col-span-2 bg-white p-6 rounded-xl shadow">
         <h3 class="font-semibold mb-4">Statistik Bulanan</h3>
         <canvas id="myChart"></canvas>
@@ -34,7 +33,7 @@
 
     <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="font-semibold mb-4">Informasi Ringkas</h3>
-        <ul class="text-sm space-y-2">
+          <ul class="text-sm space-y-2">
             <li>Total Pengguna: 220</li>
             <li>Total Guru BK: 15</li>
             <li>Siswa Aktif: 200</li>
@@ -43,7 +42,6 @@
 </div>
 
 <div class="grid grid-cols-2 gap-6 mt-6">
-
     <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="font-semibold mb-3">Data Master</h3>
         <p>Jumlah Data Pengguna: 220</p>
@@ -52,13 +50,12 @@
 
     <div class="bg-white p-6 rounded-xl shadow">
         <h3 class="font-semibold mb-3">Aktivitas Terbaru</h3>
-        <ul class="text-sm list-disc ml-4">
+          <ul class="text-sm list-disc ml-4">
             <li>Admin login</li>
             <li>Pengguna baru ditambahkan</li>
             <li>Laporan konseling masuk</li>
         </ul>
     </div>
-
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -76,5 +73,4 @@ new Chart(ctx, {
     }
 });
 </script>
-
 @endsection

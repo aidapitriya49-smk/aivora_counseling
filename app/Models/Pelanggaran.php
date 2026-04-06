@@ -6,43 +6,31 @@ use Illuminate\Database\Eloquent\Model;
 
 class Pelanggaran extends Model
 {
- protected $table = 'pelanggaran';
-
-    // Menentukan primary key
+   protected $table = 'pelanggaran'; 
     protected $primaryKey = 'id_pelanggaran';
+    protected $casts = [
+        'id_siswa' => 'string',
+        'tanggal' => 'date',
+    ];
 
-    // Karena id_pelanggaran adalah string (bukan auto-increment), set ke false
-    public $incrementing = false;
-
-    // Tipe data primary key
-    protected $keyType = 'string';
-
-    // Kolom yang bisa diisi (Mass Assignment)
     protected $fillable = [
-        'id_pelanggaran', 
         'id_guru_bk', 
         'id_siswa', 
         'jenis_pelanggaran', 
         'tanggal', 
-        'poin', 
+        'sanksi', 
+        'kategori_sp',
+        'poin',
         'keterangan'
     ];
 
-    /**
-     * Relasi ke Siswa
-     * Satu pelanggaran dimiliki oleh satu siswa
-     */
+    // RELASI KE SISWA (USER) //
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class, 'id_siswa', 'id_siswa');
+        return $this->belongsTo(User::class, 'id_siswa', 'id'); 
     }
-
-    /**
-     * Relasi ke Guru BK
-     * Satu pelanggaran dicatat oleh satu Guru BK
-     */
-    public function guru()
-    {
-        return $this->belongsTo(Guru::class, 'id_guru_bk', 'id_guru_bk');
-    }
+   public function guru()
+  {
+    return $this->belongsTo(GuruBKS::class, 'id_guru_bk', 'id_guru_bk');
+  }
 }

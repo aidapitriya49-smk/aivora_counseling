@@ -45,22 +45,39 @@
                     <th class="pb-4 px-4 text-center">Aksi</th>
                 </tr>
             </thead>
-            <tbody>
-                @foreach($tindaks as $tindak)
-                <tr class="border-b border-slate-50">
-                    <td class="py-4 px-4 font-bold">{{ $tindak->siswa->nama_siswa ?? 'N/A' }}</td>
-                    <td class="py-4 px-4 text-slate-600">{{ $tindak->tindakan }}</td>
-                    <td class="py-4 px-4">
-                        <span class="px-3 py-1 bg-purple-100 text-purple-600 rounded-full text-[10px] font-black uppercase">
-                            {{ $tindak->status }}
-                        </span>
-                    </td>
-                    <td class="py-4 px-4 text-center">
-                        <button class="bg-indigo-500 text-white px-4 py-2 rounded-xl text-[10px] font-black">DETAIL</button>
-                    </td>
-                </tr>
-                @endforeach
-            </tbody>
+           <tbody>
+    @foreach($tindaks as $tindak)
+    <tr class="border-b border-slate-50 group hover:bg-white/5 transition">
+        <td class="py-4 px-4">
+            <div class="font-bold text-slate-800">{{ $tindak->siswa->name ?? 'andini' }}</div>
+        </td>
+        <td class="py-4 px-4 text-slate-600 text-sm italic">
+            "{{ $tindak->tindakan }}"
+        </td>
+        <td class="py-4 px-4">
+            <span class="px-3 py-1 bg-indigo-100 text-indigo-600 rounded-full text-[10px] font-black uppercase shadow-sm">
+                {{ $tindak->status }}
+            </span>
+        </td>
+        <td class="py-4 px-4">
+            <div class="flex items-center justify-center gap-2">
+                <a href="{{ route('guru-bk.cetakSP', $tindak->id_pelanggaran ?? 0) }}" 
+                   class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-lg text-[10px] font-black flex items-center gap-1 transition shadow-lg">
+                   <span>📄</span> SURAT SP
+                </a>
+
+                <form action="{{ route('guru-bk.hapusPelanggaran', $tindak->id_pelanggaran ?? 0) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="bg-slate-200 hover:bg-red-100 hover:text-red-600 text-slate-500 px-3 py-2 rounded-lg text-[10px] font-black transition">
+                        HAPUS
+                    </button>
+                </form>
+            </div>
+        </td>
+    </tr>
+    @endforeach
+</tbody>
         </table>
     </div>
 </div>
@@ -71,7 +88,7 @@
 </main>
 
 <footer class="fixed bottom-0 left-0 w-full text-white/80 text-center py-2 text-[12px]">
-    © 2026 E-Counseling. All Rights Reserved.
+     © AIVORA 2026 E-Counseling. All Rights Reserved. Developed for Educational Guidance and Counseling.
 </footer>
 
 </body>

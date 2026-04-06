@@ -27,54 +27,56 @@
 </header>
 
 <main class="mt-32 px-12 pb-20">
-  <div class="mt-32 px-12 pb-20">
     <div class="flex flex-col mb-8">
         <h2 class="text-xs font-black text-white/70 uppercase tracking-[0.3em] mb-2">Konseling</h2>
         <h3 class="text-2xl font-black text-white uppercase">Jadwal Konseling Saya</h3>
     </div>
 
-    <div class=" p-8 rounded-[2.5rem] shadow-xl">
+    <div class="p-8 rounded-[2.5rem] shadow-xl bg-white/10 backdrop-blur-sm">
         <table class="w-full text-left">
             <thead>
-                <tr class="text-[11px] font-black text-slate-700 uppercase tracking-widest border-b border-slate-100">
+                <tr class="text-[11px] font-black text-white uppercase tracking-widest border-b border-white/20">
                     <th class="pb-4 px-4">Tanggal</th>
                     <th class="pb-4 px-4">Guru BK</th>
                     <th class="pb-4 px-4">Jenis</th>
                     <th class="pb-4 px-4 text-center">Status</th>
                 </tr>
             </thead>
-            <tbody class="text-sm text-slate-700">
-                @foreach($jadwals as $jadwal)
-                <tr class="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                    <td class="py-4 px-4 font-bold">{{ \Carbon\Carbon::parse($jadwal->tanggal)->format('d M Y') }}</td>
-                    <td class="py-4 px-4 text-slate-600">{{ $jadwal->guru->nama_guru ?? 'Belum Ditentukan' }}</td>
-                    <td class="py-4 px-4 capitalize">{{ $jadwal->jenis_konseling }}</td>
+            <tbody class="text-sm text-white">
+                @forelse($jadwal as $item) {{-- Pakai $jadwal sesuai dari SiswaController --}}
+                <tr class="border-b border-white/5 hover:bg-white/10 transition-colors">
+                    <td class="py-4 px-4 font-bold">
+                        {{ \Carbon\Carbon::parse($item->tanggal)->format('d M Y') }}
+                    </td>
+                    <td class="py-4 px-4 text-white/80">
+                        {{ $item->guru->nama_guru_bk ?? 'Belum Ditentukan' }}
+                    </td>
+                    <td class="py-4 px-4 capitalize text-white/80">
+                        {{ $item->jenis_konseling }}
+                    </td>
                     <td class="py-4 px-4 text-center">
                         <span class="px-3 py-1 rounded-full text-[10px] font-black uppercase 
-                            {{ $jadwal->status == 'ya' ? 'bg-green-100 text-green-600' : 'bg-amber-100 text-amber-600' }}">
-                            {{ $jadwal->status }}
+                            {{ $item->status == 'ya' ? 'bg-green-400 text-green-900' : ($item->status == 'tidak' ? 'bg-red-400 text-red-900' : 'bg-amber-400 text-amber-900') }}">
+                            {{ $item->status == 'ya' ? 'Disetujui' : ($item->status == 'tidak' ? 'Ditolak' : 'Menunggu') }}
                         </span>
                     </td>
                 </tr>
-                @endforeach
+                @empty
+                <tr>
+                    <td colspan="4" class="text-center py-10 text-white/40">Belum ada jadwal konseling aktif.</td>
+                </tr>
+                @endforelse
             </tbody>
         </table>
-
-        @if($jadwals->isEmpty())
-        <div class="text-center py-10">
-            <p class="text-slate-400 italic">Belum ada jadwal konseling yang diajukan.</p>
-        </div>
-        @endif
     </div>
-</div>
-  
+
     <div class="flex justify-end mt-8">
-            <a href="{{ route('dashboard-siswa') }}" class="text-gray-400 font-semibold hover:text-gray-600 transition text-sm">BACK HOME ></a>
-        </div>
+        <a href="{{ route('dashboard-siswa') }}" class="text-white/60 font-semibold hover:text-white transition text-sm">BACK HOME ></a>
+    </div>
 </main>
 
 <footer class="fixed bottom-0 left-0 w-full text-white/80 text-center py-2 text-[12px]">
-    © 2026 E-Counseling. All Rights Reserved.
+     © AIVORA 2026 E-Counseling. All Rights Reserved.
 </footer>
 
 </body>
